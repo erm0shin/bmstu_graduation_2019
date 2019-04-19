@@ -1,19 +1,22 @@
 package ru.bmstu.statistic.controllers
 
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
-import ru.bmstu.statistic.models.dto.Greeting
+import ru.bmstu.statistic.models.entities.PerformanceStatistic
 import ru.bmstu.statistic.services.PerformanceService
-import java.util.concurrent.atomic.AtomicLong
 
+@FlowPreview
 @RestController
 @RequestMapping("/performance")
 class PerformanceController(val performanceService: PerformanceService) {
 
-    @GetMapping
-    fun getAllPerformanceStatistic() = performanceService.getAllPerformanceStatistic()
+    @GetMapping(produces = [MediaType.APPLICATION_STREAM_JSON_VALUE])
+    fun getAllPerformanceStatistic(): Flow<PerformanceStatistic> = performanceService.getAllPerformanceStatistic()
 
     @PutMapping
-    fun addNewPerformanceStatistic(@RequestParam(value = "data", defaultValue = "World") data: String) =
+    suspend fun addNewPerformanceStatistic(@RequestParam(value = "data", defaultValue = "World") data: String) =
             performanceService.addPerformanceStatistic(data)
 
 }
