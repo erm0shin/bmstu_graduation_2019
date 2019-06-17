@@ -17,6 +17,6 @@ class PerformanceController(val performanceService: PerformanceService) {
 
     @PutMapping
     suspend fun addNewPerformanceStatistic(@RequestParam(value = "data", defaultValue = "World") data: String) =
-            performanceService.addPerformanceStatistic(data)
+        performanceService.addPerformanceStatistic(data)
 
 }
