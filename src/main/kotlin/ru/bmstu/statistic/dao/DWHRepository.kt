@@ -2,6 +2,7 @@ package ru.bmstu.statistic.dao
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import ru.bmstu.statistic.models.entities.*
+import java.time.LocalDate
 
 interface FacultyRepository : ReactiveMongoRepository<Faculty, String> {
     fun findByStudentName(student: String?): Faculty
@@ -21,9 +22,13 @@ interface StudentRepository : ReactiveMongoRepository<Student, String> {
 }
 
 
-interface PerformanceRepository : ReactiveMongoRepository<Performance, String>
+interface PerformanceRepository : ReactiveMongoRepository<Performance, String> {
+    fun findAllByBeginTimeAfterAndEndTimeBefore(begin: LocalDate, end: LocalDate): List<Performance>
+}
 
-interface AttendanceRepository : ReactiveMongoRepository<Attendance, String>
+interface AttendanceRepository : ReactiveMongoRepository<Attendance, String> {
+    fun findAllByBeginTimeAfterAndEndTimeBefore(begin: LocalDate, end: LocalDate): List<Attendance>
+}
 
 
 interface GroupPerformanceRepository : ReactiveMongoRepository<GroupPerformance, String>

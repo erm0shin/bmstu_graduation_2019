@@ -8,7 +8,10 @@ import org.springframework.web.reactive.function.client.awaitBody
 import org.springframework.web.reactive.function.client.awaitExchange
 import ru.bmstu.statistic.models.dto.AttendanceDTO
 import ru.bmstu.statistic.models.dto.PerformanceDTO
-import ru.bmstu.statistic.models.entities.*
+import ru.bmstu.statistic.models.entities.Chair
+import ru.bmstu.statistic.models.entities.Faculty
+import ru.bmstu.statistic.models.entities.Group
+import ru.bmstu.statistic.models.entities.Student
 
 @Configuration
 public class WebClientConfiguration {

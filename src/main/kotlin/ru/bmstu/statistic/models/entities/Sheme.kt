@@ -7,21 +7,24 @@ import java.time.LocalDate
 @Document("faculties")
 data class Faculty(
     @Id val id: String? = null,
-    var value: String = ""
+    var value: String = "",
+    var studentName: String = ""
 )
 
 @Document("chairs")
 data class Chair(
     @Id val id: String? = null,
     var value: String = "",
-    var facultyId: String? = null
+    var facultyId: String? = null,
+    var studentName: String = ""
 )
 
 @Document("groups")
 data class Group(
     @Id val id: String? = null,
     var value: String = "",
-    var chairId: String? = null
+    var chairId: String? = null,
+    var studentName: String = ""
 )
 
 @Document("students")
@@ -100,64 +103,64 @@ data class Attendance(
 public data class GroupPerformance(
     var group: String? = null,
     var course: String? = null,
-    var min: Double,
-    var avg: Double,
-    var max: Double,
-    var beginTime: LocalDate,
-    var endTime: LocalDate
+    var min: Double = 0.0,
+    var avg: Double = 0.0,
+    var max: Double = 0.0,
+    var beginTime: LocalDate = LocalDate.now(),
+    var endTime: LocalDate = LocalDate.now()
 )
 
 @Document("group_attendance")
 public data class GroupAttendance(
     var group: String? = null,
     var course: String? = null,
-    var min: Double,
-    var avg: Double,
-    var max: Double,
-    var beginTime: LocalDate,
-    var endTime: LocalDate
+    var min: Double = 0.0,
+    var avg: Double = 0.0,
+    var max: Double = 0.0,
+    var beginTime: LocalDate = LocalDate.now(),
+    var endTime: LocalDate = LocalDate.now()
 )
 
 @Document("chair_performance")
 public data class ChairPerformance(
     var chair: String? = null,
     var course: String? = null,
-    var min: Double,
-    var avg: Double,
-    var max: Double,
-    var beginTime: LocalDate,
-    var endTime: LocalDate
+    var min: Double = 0.0,
+    var avg: Double = 0.0,
+    var max: Double = 0.0,
+    var beginTime: LocalDate = LocalDate.now(),
+    var endTime: LocalDate = LocalDate.now()
 )
 
 @Document("chair_attendance")
 public data class ChairAttendance(
     var chair: String? = null,
     var course: String? = null,
-    var min: Double,
-    var avg: Double,
-    var max: Double,
-    var beginTime: LocalDate,
-    var endTime: LocalDate
+    var min: Double = 0.0,
+    var avg: Double = 0.0,
+    var max: Double = 0.0,
+    var beginTime: LocalDate = LocalDate.now(),
+    var endTime: LocalDate = LocalDate.now()
 )
 
 @Document("faculty_performance")
 public data class FacultyPerformance(
     var faculty: String? = null,
     var course: String? = null,
-    var min: Double,
-    var avg: Double,
-    var max: Double,
-    var beginTime: LocalDate,
-    var endTime: LocalDate
+    var min: Double = 0.0,
+    var avg: Double = 0.0,
+    var max: Double = 0.0,
+    var beginTime: LocalDate = LocalDate.now(),
+    var endTime: LocalDate = LocalDate.now()
 )
 
 @Document("faculty_attendance")
 public data class FacultyAttendance(
     var faculty: String? = null,
     var course: String? = null,
-    var min: Double,
-    var avg: Double,
-    var max: Double,
-    var beginTime: LocalDate,
-    var endTime: LocalDate
+    var min: Double = 0.0,
+    var avg: Double = 0.0,
+    var max: Double = 0.0,
+    var beginTime: LocalDate = LocalDate.now(),
+    var endTime: LocalDate = LocalDate.now()
 )

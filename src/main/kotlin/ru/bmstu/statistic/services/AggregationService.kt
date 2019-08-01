@@ -82,32 +82,34 @@ public class AggregationService(
     }
 
     private fun aggregate() {
-        val performance = performanceRepository.findAllInInterval(LocalDate.now().minusMonths(6), LocalDate.now())
-        val attendance = attendanceRepository.findAllInInterval(LocalDate.now().minusMonths(6), LocalDate.now())
-
-        val test: List<Performance> = listOf()
-
-        test.minBy { it.score }
+        val performance = performanceRepository.findAllByBeginTimeAfterAndEndTimeBefore(
+            LocalDate.now().minusMonths(6),
+            LocalDate.now()
+        )
+        val attendance = attendanceRepository.findAllByBeginTimeAfterAndEndTimeBefore(
+            LocalDate.now().minusMonths(6),
+            LocalDate.now()
+        )
 
         // Успеваемость по группам
         performance
             .groupBy { groupRepository.findByStudentName(it.student) }
             .map { groupsPerformance ->
-                groupsPerformance.values()
+                groupsPerformance.value
                     .groupBy { it.course }
                     .map { groupsPerformanceInCourse ->
-                        groupsPerformanceInCourse.values().forEach { perf ->
+                        groupsPerformanceInCourse.value.forEach { perf ->
                             val performanceEntity = GroupPerformance()
-                            performanceEntity.group = groupsPerformanceInCourse.key()?.value
+                            performanceEntity.group = groupsPerformanceInCourse.key ?: ""
                             performanceEntity.beginTime = LocalDate.now().minusMonths(6)
                             performanceEntity.endTime = LocalDate.now()
                             performanceEntity.course = perf.course
                             performanceEntity.min =
-                                groupsPerformanceInCourse.values().minPerformanceByCourseAmongStudent()
+                                groupsPerformanceInCourse.value.minPerformanceAmongStudent()
                             performanceEntity.max =
-                                groupsPerformanceInCourse.values().maxPerformanceByCourseAmongStudent()
+                                groupsPerformanceInCourse.value.maxPerformanceAmongStudent()
                             performanceEntity.avg =
-                                groupsPerformanceInCourse.values().avgPerformanceByCourseAmongStudent()
+                                groupsPerformanceInCourse.value.avgPerformanceAmongStudent()
                             groupPerformanceRepository.save(performanceEntity)
                         }
                     }
@@ -116,21 +118,21 @@ public class AggregationService(
         performance
             .groupBy { chairRepository.findByStudentName(it.student) }
             .map { chairsPerformance ->
-                chairsPerformance.values()
+                chairsPerformance.value
                     .groupBy { it.course }
                     .map { chairsPerformanceInCourse ->
-                        chairsPerformanceInCourse.values().forEach { perf ->
+                        chairsPerformanceInCourse.value.forEach { perf ->
                             val performanceEntity = ChairPerformance()
-                            performanceEntity.chair = chairsPerformanceInCourse.key()?.value
+                            performanceEntity.chair = chairsPerformanceInCourse.key ?: ""
                             performanceEntity.beginTime = LocalDate.now().minusMonths(6)
                             performanceEntity.endTime = LocalDate.now()
                             performanceEntity.course = perf.course
                             performanceEntity.min =
-                                chairsPerformanceInCourse.values().minPerformanceByCourseAmongStudent()
+                                chairsPerformanceInCourse.value.minPerformanceAmongStudent()
                             performanceEntity.max =
-                                chairsPerformanceInCourse.values().maxPerformanceByCourseAmongStudent()
+                                chairsPerformanceInCourse.value.maxPerformanceAmongStudent()
                             performanceEntity.avg =
-                                chairsPerformanceInCourse.values().avgPerformanceByCourseAmongStudent()
+                                chairsPerformanceInCourse.value.avgPerformanceAmongStudent()
                             chairPerformanceRepository.save(performanceEntity)
                         }
                     }
@@ -139,21 +141,21 @@ public class AggregationService(
         performance
             .groupBy { facultyRepository.findByStudentName(it.student) }
             .map { facultysPerformance ->
-                facultysPerformance.values()
+                facultysPerformance.value
                     .groupBy { it.course }
                     .map { facultysPerformanceInCourse ->
-                        facultysPerformanceInCourse.values().forEach { perf ->
+                        facultysPerformanceInCourse.value.forEach { perf ->
                             val performanceEntity = FacultyPerformance()
-                            performanceEntity.faculty = facultysPerformanceInCourse.key()?.value
+                            performanceEntity.faculty = facultysPerformanceInCourse.key ?: ""
                             performanceEntity.beginTime = LocalDate.now().minusMonths(6)
                             performanceEntity.endTime = LocalDate.now()
                             performanceEntity.course = perf.course
                             performanceEntity.min =
-                                facultysPerformanceInCourse.values().minPerformanceByCourseAmongStudent()
+                                facultysPerformanceInCourse.value.minPerformanceAmongStudent()
                             performanceEntity.max =
-                                facultysPerformanceInCourse.values().maxPerformanceByCourseAmongStudent()
+                                facultysPerformanceInCourse.value.maxPerformanceAmongStudent()
                             performanceEntity.avg =
-                                facultysPerformanceInCourse.values().avgPerformanceByCourseAmongStudent()
+                                facultysPerformanceInCourse.value.avgPerformanceAmongStudent()
                             facultyPerformanceRepository.save(performanceEntity)
                         }
                     }
@@ -163,21 +165,21 @@ public class AggregationService(
         attendance
             .groupBy { groupRepository.findByStudentName(it.student) }
             .map { groupsAttendance ->
-                groupsAttendance.values()
+                groupsAttendance.value
                     .groupBy { it.course }
                     .map { groupsAttendanceInCourse ->
-                        groupsAttendanceInCourse.values().forEach { perf ->
+                        groupsAttendanceInCourse.value.forEach { perf ->
                             val attendanceEntity = GroupAttendance()
-                            attendanceEntity.group = groupsAttendanceInCourse.key()?.value
+                            attendanceEntity.group = groupsAttendanceInCourse.key ?: ""
                             attendanceEntity.beginTime = LocalDate.now().minusMonths(6)
                             attendanceEntity.endTime = LocalDate.now()
                             attendanceEntity.course = perf.course
                             attendanceEntity.min =
-                                groupsAttendanceInCourse.values().minAttendanceByCourseAmongStudent()
+                                groupsAttendanceInCourse.value.minAttendanceAmongStudent()
                             attendanceEntity.max =
-                                groupsAttendanceInCourse.values().maxAttendanceByCourseAmongStudent()
+                                groupsAttendanceInCourse.value.maxAttendanceAmongStudent()
                             attendanceEntity.avg =
-                                groupsAttendanceInCourse.values().avgAttendanceByCourseAmongStudent()
+                                groupsAttendanceInCourse.value.avgAttendanceAmongStudent()
                             groupAttendanceRepository.save(attendanceEntity)
                         }
                     }
@@ -186,21 +188,21 @@ public class AggregationService(
         attendance
             .groupBy { chairRepository.findByStudentName(it.student) }
             .map { chairsAttendance ->
-                chairsAttendance.values()
+                chairsAttendance.value
                     .groupBy { it.course }
                     .map { chairsAttendanceInCourse ->
-                        chairsAttendanceInCourse.values().forEach { perf ->
+                        chairsAttendanceInCourse.value.forEach { perf ->
                             val attendanceEntity = ChairAttendance()
-                            attendanceEntity.chair = chairsAttendanceInCourse.key()?.value
+                            attendanceEntity.chair = chairsAttendanceInCourse.key ?: ""
                             attendanceEntity.beginTime = LocalDate.now().minusMonths(6)
                             attendanceEntity.endTime = LocalDate.now()
                             attendanceEntity.course = perf.course
                             attendanceEntity.min =
-                                chairsAttendanceInCourse.values().minAttendanceByCourseAmongStudent()
+                                chairsAttendanceInCourse.value.minAttendanceAmongStudent()
                             attendanceEntity.max =
-                                chairsAttendanceInCourse.values().maxAttendanceByCourseAmongStudent()
+                                chairsAttendanceInCourse.value.maxAttendanceAmongStudent()
                             attendanceEntity.avg =
-                                chairsAttendanceInCourse.values().avgAttendanceByCourseAmongStudent()
+                                chairsAttendanceInCourse.value.avgAttendanceAmongStudent()
                             chairAttendanceRepository.save(attendanceEntity)
                         }
                     }
@@ -209,60 +211,60 @@ public class AggregationService(
         attendance
             .groupBy { facultyRepository.findByStudentName(it.student) }
             .map { facultysAttendance ->
-                facultysAttendance.values()
+                facultysAttendance.value
                     .groupBy { it.course }
                     .map { facultysAttendanceInCourse ->
-                        facultysAttendanceInCourse.values().forEach { perf ->
+                        facultysAttendanceInCourse.value.forEach { perf ->
                             val attendanceEntity = FacultyAttendance()
-                            attendanceEntity.faculty = facultysAttendanceInCourse.key()?.value
+                            attendanceEntity.faculty = facultysAttendanceInCourse.key ?: ""
                             attendanceEntity.beginTime = LocalDate.now().minusMonths(6)
                             attendanceEntity.endTime = LocalDate.now()
                             attendanceEntity.course = perf.course
                             attendanceEntity.min =
-                                facultysAttendanceInCourse.values().minAttendanceByCourseAmongStudent()
+                                facultysAttendanceInCourse.value.minAttendanceAmongStudent()
                             attendanceEntity.max =
-                                facultysAttendanceInCourse.values().maxAttendanceByCourseAmongStudent()
+                                facultysAttendanceInCourse.value.maxAttendanceAmongStudent()
                             attendanceEntity.avg =
-                                facultysAttendanceInCourse.values().avgAttendanceByCourseAmongStudent()
+                                facultysAttendanceInCourse.value.avgAttendanceAmongStudent()
                             facultyAttendanceRepository.save(attendanceEntity)
                         }
                     }
             }
     }
 
-    private fun List<Performance>.minPerformanceByCourseAmongStudent(): Double? {
+    private fun List<Performance>.minPerformanceAmongStudent(): Double {
         return this.groupBy { it.student }
             .map { entry -> entry.value.map { perf -> perf.score }.sum() }
-            .min()
+            .min() ?: 0.0
     }
 
-    private fun List<Performance>.maxPerformanceByCourseAmongStudent(): Double? {
+    private fun List<Performance>.maxPerformanceAmongStudent(): Double {
         return this.groupBy { it.student }
             .map { entry -> entry.value.map { perf -> perf.score }.sum() }
-            .max()
+            .max() ?: 100.0
     }
 
-    private fun List<Performance>.avgPerformanceByCourseAmongStudent(): Double? {
+    private fun List<Performance>.avgPerformanceAmongStudent(): Double {
         return this.groupBy { it.student }
             .map { entry -> entry.value.map { perf -> perf.score }.sum() }
-            .average()
+            .average() ?: 50.0
     }
 
-    private fun List<Attendance>.minAttendanceByCourseAmongStudent(): Double? {
+    private fun List<Attendance>.minAttendanceAmongStudent(): Double {
         return this.groupBy { it.student }
-            .map { entry -> entry.value.map { perf -> perf.score }.sum() }
-            .min()
+            .map { entry -> entry.value.map { att -> att.score }.sum() }
+            .min() ?: 0.0
     }
 
-    private fun List<Attendance>.maxAttendanceByCourseAmongStudent(): Double? {
+    private fun List<Attendance>.maxAttendanceAmongStudent(): Double {
         return this.groupBy { it.student }
-            .map { entry -> entry.value.map { perf -> perf.score }.sum() }
-            .max()
+            .map { entry -> entry.value.map { att -> att.score }.sum() }
+            .max() ?: 100.0
     }
 
-    private fun List<Attendance>.avgAttendanceByCourseAmongStudent(): Double? {
+    private fun List<Attendance>.avgAttendanceAmongStudent(): Double {
         return this.groupBy { it.student }
-            .map { entry -> entry.value.map { perf -> perf.score }.sum() }
-            .average()
+            .map { entry -> entry.value.map { att -> att.score }.sum() }
+            .average() ?: 50.0
     }
 }
